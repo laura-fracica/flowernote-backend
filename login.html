@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FlowerNote — Iniciar sesión</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --pink:   #F48FB1;
+      --dark:   #8a3a52;
+      --bg:     #fce8f0;
+      --card:   #fff5f8;
+      --border: #f5d0e0;
+      --danger: #e7296f;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: Poppins, sans-serif;
+      background: var(--bg);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card {
+      background: var(--card);
+      border-radius: 1.4rem;
+      padding: 2.5rem 2rem;
+      width: 100%;
+      max-width: 400px;
+      border: 1px solid var(--border);
+      box-shadow: 0 8px 40px rgba(244,143,177,0.18);
+    }
+    .logo {
+      text-align: center;
+      margin-bottom: 1.8rem;
+    }
+    .logo h1 {
+      font-size: 1.6rem;
+      color: var(--dark);
+      font-weight: 800;
+    }
+    .logo h1 span { color: var(--pink); }
+    .logo p { color: #c2547a; font-size: 0.82rem; margin-top: 0.3rem; }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      background: var(--bg);
+      border-radius: 2rem;
+      padding: 4px;
+      margin-bottom: 1.8rem;
+      border: 1px solid var(--border);
+    }
+    .tab-btn {
+      flex: 1;
+      padding: 0.55rem;
+      border: none;
+      background: transparent;
+      border-radius: 2rem;
+      font-family: Poppins, sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      color: #c2547a;
+      transition: all 250ms ease;
+    }
+    .tab-btn.active {
+      background: var(--pink);
+      color: #fff;
+    }
+
+    /* Form */
+    .form { display: none; flex-direction: column; gap: 1rem; }
+    .form.active { display: flex; }
+
+    label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--dark);
+      margin-bottom: 0.3rem;
+      display: block;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border-radius: 0.8rem;
+      border: 1.5px solid var(--border);
+      background: var(--bg);
+      font-family: Poppins, sans-serif;
+      font-size: 0.82rem;
+      color: var(--dark);
+      outline: none;
+      transition: border-color 200ms;
+    }
+    input:focus { border-color: var(--pink); }
+
+    .btn {
+      padding: 0.85rem;
+      border-radius: 0.8rem;
+      border: none;
+      background: var(--pink);
+      color: #fff;
+      font-family: Poppins, sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 200ms;
+      margin-top: 0.4rem;
+    }
+    .btn:hover { background: var(--dark); }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .error-msg {
+      background: #fce8e8;
+      color: var(--danger);
+      border: 1px solid #f5c0c0;
+      border-radius: 0.6rem;
+      padding: 0.7rem 1rem;
+      font-size: 0.78rem;
+      display: none;
+    }
+    .success-msg {
+      background: #eef5ee;
+      color: #5a8a5a;
+      border: 1px solid #c0dcc0;
+      border-radius: 0.6rem;
+      padding: 0.7rem 1rem;
+      font-size: 0.78rem;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="card">
+  <div class="logo">
+    <h1>FLOWERS<span>NOTES</span></h1>
+    <p>Panel de administración 🌸</p>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="cambiarTab('login')">Iniciar sesión</button>
+    <button class="tab-btn"       onclick="cambiarTab('register')">Registrarse</button>
+  </div>
+
+  <!-- FORM LOGIN -->
+  <form class="form active" id="form-login" onsubmit="handleLogin(event)">
+    <div>
+      <label>Email</label>
+      <input type="email" id="login-email" placeholder="admin@flowernote.com" required />
+    </div>
+    <div>
+      <label>Contraseña</label>
+      <input type="password" id="login-password" placeholder="••••••••" required />
+    </div>
+    <div class="error-msg"   id="login-error"></div>
+    <button class="btn" type="submit" id="btn-login">Entrar al dashboard</button>
+  </form>
+
+  <!-- FORM REGISTRO -->
+  <form class="form" id="form-register" onsubmit="handleRegister(event)">
+    <div>
+      <label>Nombre completo</label>
+      <input type="text" id="reg-nombre" placeholder="Laura García" required />
+    </div>
+    <div>
+      <label>Email</label>
+      <input type="email" id="reg-email" placeholder="tu@email.com" required />
+    </div>
+    <div>
+      <label>Contraseña (mínimo 6 caracteres)</label>
+      <input type="password" id="reg-password" placeholder="••••••••" required minlength="6" />
+    </div>
+    <div class="error-msg"   id="reg-error"></div>
+    <div class="success-msg" id="reg-success"></div>
+    <button class="btn" type="submit" id="btn-register">Crear cuenta</button>
+  </form>
+</div>
+
+<script>
+  const API = 'http://localhost:3000/api';
+
+  // Si ya hay sesión activa, ir directo al dashboard
+  if (localStorage.getItem('fn_token')) {
+    window.location.href = './index.html';
+  }
+
+  function cambiarTab(tab) {
+    document.querySelectorAll('.tab-btn').forEach((b, i) =>
+      b.classList.toggle('active', (tab === 'login') ? i === 0 : i === 1)
+    );
+    document.getElementById('form-login').classList.toggle('active',    tab === 'login');
+    document.getElementById('form-register').classList.toggle('active', tab === 'register');
+  }
+
+  function mostrarError(id, msg) {
+    const el = document.getElementById(id);
+    el.textContent = msg;
+    el.style.display = 'block';
+    setTimeout(() => el.style.display = 'none', 4000);
+  }
+
+  async function handleLogin(e) {
+    e.preventDefault();
+    const btn = document.getElementById('btn-login');
+    btn.disabled = true;
+    btn.textContent = 'Entrando...';
+
+    try {
+      const res = await fetch(`${API}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email:    document.getElementById('login-email').value,
+          password: document.getElementById('login-password').value,
+        }),
+      });
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.message);
+
+      localStorage.setItem('fn_token', data.data.token);
+      localStorage.setItem('fn_user',  JSON.stringify(data.data.user));
+      window.location.href = './index.html';
+
+    } catch (err) {
+      mostrarError('login-error', err.message || 'Error al iniciar sesión.');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Entrar al dashboard';
+    }
+  }
+
+  async function handleRegister(e) {
+    e.preventDefault();
+    const btn = document.getElementById('btn-register');
+    btn.disabled = true;
+    btn.textContent = 'Creando cuenta...';
+
+    try {
+      const res = await fetch(`${API}/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nombre:   document.getElementById('reg-nombre').value,
+          email:    document.getElementById('reg-email').value,
+          password: document.getElementById('reg-password').value,
+        }),
+      });
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.message);
+
+      localStorage.setItem('fn_token', data.data.token);
+      localStorage.setItem('fn_user',  JSON.stringify(data.data.user));
+      window.location.href = './index.html';
+
+    } catch (err) {
+      mostrarError('reg-error', err.message || 'Error al registrarse.');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Crear cuenta';
+    }
+  }
+</script>
+
+</body>
+</html>
